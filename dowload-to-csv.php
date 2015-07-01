@@ -49,7 +49,7 @@ function get_rows($data, $large)
 function convert_csv($url, $data, $size)
 {
 	$start = microtime(1);
-	debug(sprintf('%s%s  => [ download:  %.2fs, ', $url, PHP_EOL, $start-START));
+	if (DEBUG) echo sprintf('%s%s  => [ download:  %.2fs, ', $url, PHP_EOL, $start-START);
 	$filename = RESULTS.str_replace('.asp', '.csv', basename($url));
 	$fp = fopen($filename, 'w');
 	$large = $size > 90000;
@@ -58,7 +58,7 @@ function convert_csv($url, $data, $size)
 	}
 	fclose($fp);
 	$end = microtime(1);
-	debug(sprintf('parsing: %.2fs, total: %.2fs ]%s%s', $end-$start, $end-START, PHP_EOL,PHP_EOL));
+	if (DEBUG) echo sprintf('parsing: %.2fs, total: %.2fs ]', $end-$start, $end-START), PHP_EOL;
 }
 
 function make_request($urls, $callback)
@@ -90,8 +90,4 @@ function make_request($urls, $callback)
     } while ($running);
     
     curl_multi_close($master);
-}
-
-function debug($str) {
-	if (DEBUG) echo $str;
 }

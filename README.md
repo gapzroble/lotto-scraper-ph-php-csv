@@ -2,4 +2,4 @@
 
 ## Requirements
 * ext-curl
-* csv?
+* php 5.5

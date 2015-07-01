@@ -20,8 +20,11 @@ $urls = array(
 );
 make_request($urls, 'convert_csv');
 
-function get_rows($data)
+function get_rows($data, $large)
 {
+	if (!$large) {
+		$data = str_replace('&nbsp;', '', $data);
+	}
 	$i = 0;
 	while(true)
 	{
@@ -30,7 +33,10 @@ function get_rows($data)
 		$end = strpos($data, '</tr>', $start);
 		$i = $end;
 		$length = $end - $start + 5;
-		$row = str_replace('&nbsp;', '', substr($data, $start, $length));
+		$row = substr($data, $start, $length);
+		if ($large) {
+			$row = str_replace('&nbsp;', '', $row);
+		}
 		$cols = explode('<td', $row);
 		unset($cols[0]); // tr
 		$row = array_map(function($r) { // clean
@@ -40,13 +46,14 @@ function get_rows($data)
 	}
 }
 
-function convert_csv($url, $data)
+function convert_csv($url, $data, $size)
 {
 	$start = microtime(1);
 	debug(sprintf('%s%s  => [ download:  %.2fs, ', $url, PHP_EOL, $start-START));
 	$filename = RESULTS.str_replace('.asp', '.csv', basename($url));
 	$fp = fopen($filename, 'w');
-	foreach (get_rows($data) as $row) {
+	$large = $size > 90000;
+	foreach (get_rows($data, $large) as $row) {
 		fputcsv($fp, $row);
 	}
 	fclose($fp);
@@ -77,7 +84,7 @@ function make_request($urls, $callback)
             if ($info['http_code'] == 200)  {
                 $output = curl_multi_getcontent($done['handle']);
                 curl_multi_remove_handle($master, $done['handle']);
-                $callback($info['url'], $output);
+                $callback($info['url'], $output, $info['size_download']);
             }
         }
     } while ($running);

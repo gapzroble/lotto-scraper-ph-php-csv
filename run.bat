@@ -1,6 +1,8 @@
 @echo off
 setlocal
 
+:start
+
 rem Remeber start time. Note that we don't look at the date, so this
 rem calculation won't work right if the program run spans local midnight.
 set t0=%time: =0%
@@ -39,5 +41,8 @@ echo Started at %t0%
 echo Ran for %runtime%0 ms
 echo.
 
+echo Run again?
 pause
+echo.
+goto start
 rem https://stackoverflow.com/questions/739606/how-long-does-a-batch-file-take-to-execute

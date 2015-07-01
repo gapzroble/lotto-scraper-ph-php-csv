@@ -1,5 +1,5 @@
 # pcso
 
 ## Requirements
-ext-curl
-csv?
+* ext-curl
+* csv?

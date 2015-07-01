@@ -1,2 +1,5 @@
 # pcso
-## TODO
+
+## Requirements
+ext-curl
+csv?

@@ -19,7 +19,6 @@ $urls = array(
 	'http://pcso-lotto-results-and-statistics.webnatin.com/2-dresults.asp',
 );
 make_request($urls, 'convert_csv');
-$done = true;
 
 function get_rows($data)
 {
